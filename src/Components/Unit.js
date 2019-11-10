@@ -23,8 +23,9 @@ let Unit = ({
   }
 
   let selectUnit = e => {
-    console.log("selectUnit called");
+    console.log("selectUnit called", e.target.id, typeof e.target.id);
     updateSelectedUnit(e.target.id);
+    isSelected = true;
   };
 
   return (

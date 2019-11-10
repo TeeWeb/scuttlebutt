@@ -4,16 +4,30 @@ import "./Player.css";
 
 export default class Player extends React.Component {
   state = {
-    selectedUnitId: {},
+    selectedUnitId: "",
     handleUnitSelection: this.props.handleUnitSelection,
     units: this.props.units,
     mapDimensions: [0, 0],
     playerColor: this.props.playerColor
   };
 
-  updateSelectedUnit = unit => {
-    console.log("updating selectedUnit:", this.props.name, unit);
-    this.setState({ selectedUnitId: unit });
+  updateSelectedUnit = unitId => {
+    console.log("updating selectedUnit:", this.props.name, unitId);
+    this.setState({ selectedUnitId: unitId });
+    const newUnitsArray = this.state.units.slice();
+    console.log(newUnitsArray);
+    newUnitsArray.forEach(unit => {
+      console.log(unit, unitId);
+      // eslint-disable-next-line
+      if (unit.id == unitId) {
+        console.log("FOUND SELECTED UNIT");
+        unit.isSelected = true;
+      } else {
+        unit.isSelected = false;
+      }
+    });
+    console.log(newUnitsArray);
+    this.setState({ units: newUnitsArray });
   };
 
   // getUnits = () => {
@@ -36,7 +50,7 @@ export default class Player extends React.Component {
   // };
 
   componentDidMount() {
-    let map = document.getElementById("map");
+    const map = document.getElementById("map");
     this.setState({ mapDimensions: [map.clientWidth, map.clientHeight] });
   }
 
