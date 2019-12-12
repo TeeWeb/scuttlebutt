@@ -3,6 +3,7 @@ import "./App.css";
 
 import Map from "./Components/Map";
 import CPanel from "./Components/CPanel";
+// import Player from "./Components/Player";
 
 function App() {
   const game = {
@@ -11,45 +12,65 @@ function App() {
         id: 1,
         name: "Player1",
         units: [
-          { id: 0, posX: 0, posY: 0, isSelected: false },
-          { id: 1, posX: 90, posY: 90, isSelected: false }
+          { id: 0, posX: 0, posY: 0, isSelected: false, isAlive: true },
+          { id: 1, posX: 90, posY: 90, isSelected: false, isAlive: true },
+          { id: 2, posX: 30, posY: 90, isSelected: false, isAlive: false }
         ],
         playerColor: "#0000ee",
-        isActive: true
+        isPlayersTurn: true,
+        isAlive: true
       },
       {
         id: 2,
         name: "Player2",
         units: [
-          { id: 0, posX: 25, posY: 24, isSelected: false },
-          { id: 1, posX: 50, posY: 75, isSelected: false }
+          { id: 0, posX: 25, posY: 24, isSelected: false, isAlive: true },
+          { id: 1, posX: 50, posY: 75, isSelected: false, isAlive: true }
         ],
         playerColor: "#ee0000",
-        isActive: false
+        isPlayersTurn: false,
+        isAlive: true
       }
     ],
-    activePlayerId: 1,
-    currentTurn: 0
+    turn: {
+      playerId: 1,
+      number: 1
+    }
   };
 
-  const getPlayerName = id => {
+  let getCurrentPlayer = () => {
+    let currentPlayer;
     game.players.forEach(player => {
-      if (id === player.id) {
-        console.log(player.name);
-        return player.name;
+      if (player.id === game.turn.playerId) {
+        // console.log("current player:", player);
+        currentPlayer = player;
       }
     });
+    return currentPlayer;
+  };
+
+  let getPlayerName = id => {
+    let name;
+    game.players.forEach(player => {
+      if (player.id === id) {
+        name = player.name;
+      }
+    });
+    return name;
   };
 
   return (
     <div className="App">
       <header className="App-header" id="appHeader">
-        <h4>Scuttlebutt</h4>
+        <h4>[title]</h4>
       </header>
-      <Map players={game.players} activePlayer={game.activePlayer} />
+      <Map
+        players={game.players}
+        currentPlayer={getCurrentPlayer(game.players)}
+      />
       <CPanel
-        playerName={getPlayerName(game.activePlayerId)}
-        turn={game.currentTurn}
+        playerName={getPlayerName(getCurrentPlayer().id)}
+        turn={game.turn.number}
       />
     </div>
   );

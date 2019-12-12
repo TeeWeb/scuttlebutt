@@ -6,3 +6,7 @@
   height: 1em;
   position: absolute;
 }
+
+.selected {
+  background: #cfcf04 !important;
+}
