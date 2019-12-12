@@ -3,4 +3,27 @@
   background: transparent;
   width: 75%;
   margin: 1em auto;
+  display: block;
+  flex-flow: row wrap;
+}
+
+.cpanel-title {
+  width: 100%;
+}
+
+.cpanel-info {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+}
+
+.active-player-name {
+  font-size: 0.75em;
+}
+
+.turn-counter {
+  font-size: 0.5em;
+  text-align: right;
 }

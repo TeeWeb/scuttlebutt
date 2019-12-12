@@ -1,41 +1,62 @@
 import React from "react";
 import "./Unit.css";
 
-let Unit = ({
-  id,
-  player,
-  posX,
-  posY,
-  isSelected,
-  updateSelectedUnit,
-  playerColor
-}) => {
-  let classes = ["unit", player];
-  let style = {
-    left: posX,
-    top: posY,
-    background: playerColor
+export default class Unit extends React.Component {
+  state = {
+    id: this.props.id,
+    player: this.props.player,
+    isPlayersTurn: this.props.isPlayersTurn,
+    isSelected: this.props.isSelected,
+    styles: {
+      left: this.props.posX,
+      top: this.props.posY
+    },
+    color: this.props.color
   };
 
-  if (isSelected) {
-    classes.push("selected");
-    style.background = "#00eeee";
+  setClasses = () => {
+    let classes = "unit " + this.state.player;
+    if (this.state.isSelected) {
+      classes += " selected";
+    }
+    return classes;
+  };
+
+  selectUnit = e => {
+    if (this.state.isPlayersTurn) {
+      console.log("It's my turn...");
+      this.props.updateSelectedUnit(e.target);
+      this.setState({ isSelected: true });
+      return true;
+    } else {
+      console.log("Not my turn...");
+      return false;
+    }
+  };
+
+  componentDidMount() {
+    let updatedStyle = { ...this.state.styles };
+
+    if (!this.state.isSelected) {
+      // set unit background to player's color if not selected
+      updatedStyle.background = this.state.color;
+      console.log(updatedStyle);
+      this.setState({ styles: updatedStyle });
+    }
   }
 
-  let selectUnit = e => {
-    console.log("selectUnit called");
-    updateSelectedUnit(e.target.id);
-  };
-
-  return (
-    <div
-      className={"unit " + player}
-      id={id}
-      role="button"
-      onClick={selectUnit}
-      style={style}
-    ></div>
-  );
-};
-
-export default Unit;
+  render() {
+    const classes = this.setClasses();
+    const styles = this.state.styles;
+    return (
+      <div
+        className={classes}
+        id={this.state.id}
+        player={this.state.player}
+        role="button"
+        onClick={this.selectUnit}
+        style={styles}
+      ></div>
+    );
+  }
+}

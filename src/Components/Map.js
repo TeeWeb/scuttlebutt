@@ -1,60 +1,47 @@
 import * as React from "react";
 import "./Map.css";
 
+import "./Player";
 import Player from "./Player";
 
-const Map = () => {
-  const players = [
-    {
-      id: 1,
-      name: "Player1",
-      units: [
-        { posX: 0, posY: 0, isSelected: false },
-        { posX: 90, posY: 90, isSelected: false }
-      ],
-      playerColor: "#0000ee"
-    },
-    {
-      id: 2,
-      name: "Player2",
-      units: [
-        { posX: 25, posY: 24, isSelected: false },
-        { posX: 50, posY: 75, isSelected: false }
-      ],
-      playerColor: "#ee0000"
-    }
-  ];
-
-  let handleClick = event => {
-    console.log("absolute click location:", event.clientX, event.clientY);
-    // Check if target is a unit
-    if (event.target.className.includes("unit")) {
-      // target is a unit
-      console.log("selected a players unit: ", event.target);
-    } else {
-      // target is not a unit
-      console.log("did not select a unit...");
-    }
-    return;
+export default class Map extends React.Component {
+  state = {
+    currentPlayer: this.props.currentPlayer,
+    players: this.props.players
   };
 
-  const playerElements = players.map((player, i) => {
+  handleClick = event => {
+    console.log("Map click location:", event.clientX, event.clientY);
+  };
+
+  componentDidMount() {
+    this.setState({
+      currentPlayer: this.props.currentPlayer,
+      players: this.props.players
+    });
+  }
+
+  render() {
+    const activePlayers = this.state.players.map((player, i) => {
+      if (player.isAlive) {
+        return (
+          <Player
+            key={i}
+            id={player.id}
+            name={player.name}
+            playerColor={player.playerColor}
+            isPlayersTurn={player.isPlayersTurn}
+            units={player.units}
+          />
+        );
+      } else {
+        return false;
+      }
+    });
     return (
-      <Player
-        key={i}
-        id={player.id}
-        name={player.name}
-        playerColor={player.playerColor}
-        units={player.units}
-      />
+      <div id="map" className="map" onClick={this.handleClick}>
+        {activePlayers}
+      </div>
     );
-  });
-
-  return (
-    <div id="map" className="map" onClick={handleClick}>
-      {playerElements}
-    </div>
-  );
-};
-
-export default Map;
+  }
+}
