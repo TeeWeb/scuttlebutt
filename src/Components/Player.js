@@ -52,7 +52,7 @@ export default class Player extends React.Component {
   }
 
   render() {
-    const classes = "unit " + this.props.name;
+    const classes = "player " + this.props.name;
     const livingUnits = this.state.units.map((unit, i) => {
       if (unit.isAlive) {
         return (

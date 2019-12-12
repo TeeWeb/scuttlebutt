@@ -12,7 +12,7 @@ function App() {
         id: 1,
         name: "Player1",
         units: [
-          { id: 0, posX: 0, posY: 0, isSelected: false, isAlive: true },
+          { id: 0, posX: 10, posY: 200, isSelected: false, isAlive: true },
           { id: 1, posX: 90, posY: 90, isSelected: false, isAlive: true },
           { id: 2, posX: 30, posY: 90, isSelected: false, isAlive: false }
         ],
