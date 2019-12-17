@@ -8,5 +8,5 @@
 }
 
 .selected {
-  background: #cfcf04 !important;
+  border: solid 2px #cfcf04;
 }
