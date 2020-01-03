@@ -8,11 +8,27 @@ export default class Unit extends React.Component {
     isPlayersTurn: this.props.isPlayersTurn,
     isSelected: this.props.isSelected,
     classes: this.props.className,
+    posX: this.props.posX,
+    posY: this.props.posY,
     styles: {
-      left: this.props.posX,
-      top: this.props.posY,
       backgroundColor: this.props.color
     }
+  };
+
+  getMap = () => {
+    return document.getElementById("map");
+  };
+
+  calcXCoord = x => {
+    const map = this.getMap();
+    let scaledX = (map.clientWidth / 1000) * x;
+    return scaledX;
+  };
+
+  calcYCoord = y => {
+    const map = this.getMap();
+    let scaledY = (map.clientHeight / 1000) * y;
+    return scaledY;
   };
 
   setClasses = () => {
@@ -38,6 +54,8 @@ export default class Unit extends React.Component {
     if (!this.state.isSelected) {
       // set unit background to player's color if not selected
       updatedStyle.background = this.state.color;
+      updatedStyle.left = this.calcXCoord(this.state.posX);
+      updatedStyle.top = this.calcYCoord(this.state.posY);
       this.setState({ styles: updatedStyle });
     }
   }
