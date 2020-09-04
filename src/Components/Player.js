@@ -9,11 +9,11 @@ const selectedBorderStyle = "2px solid #cfcf04";
 const defaultBorderStyle = "2px solid black";
 
 function Player(props) {
-  const [mapDimensions, setMapDimensions] = useState([0, 0]);
+  // const [mapDimensions, setMapDimensions] = useState([0, 0]);
   const [playerName, setPlayerName] = useState(props.name);
   const playerColor = props.playerColor;
   const [isPlayersTurn, setIsPlayersTurn] = useState(props.isPlayersTurn);
-  const [classes, setClasses] = useState("player " + props.playerName);
+  // const [classes, setClasses] = useState("player " + props.playerName);
   const [units, setUnits] = useState(props.units);
   const [selectedUnit, setSelectedUnit] = useState(null);
 
@@ -38,11 +38,8 @@ function Player(props) {
   }
 
   function handleUnitsUpdate(newSelectedUnit) {
-    console.log(newSelectedUnit);
-
     const prevSelectedUnit = getSelectedUnitId();
     const newUnitsArray = units.slice();
-    console.log(prevSelectedUnit, newUnitsArray);
 
     // Check if there is a unit currently selected (otherwise it will be undefined)
     if (prevSelectedUnit !== undefined) {
@@ -55,7 +52,6 @@ function Player(props) {
         newUnitsArray.forEach((unit) => {
           // eslint-disable-next-line
           if (newSelectedUnit.id == unit.id) {
-            console.log("FOUND SELECTED UNIT");
             unit.isSelected = true;
             setSelectedUnit(newSelectedUnit);
           } else {
@@ -65,17 +61,13 @@ function Player(props) {
       }
     } else {
       // No currently selected unit. This is the first unit selection this turn.
-      console.log("First unit selection...", newSelectedUnit.id);
       newUnitsArray[newSelectedUnit.id].isSelected = true;
       newUnitsArray[newSelectedUnit.id].borderStyle = selectedBorderStyle;
       setSelectedUnit(newSelectedUnit);
     }
 
-    console.log(newUnitsArray);
     setUnits(newUnitsArray);
   }
-
-  console.log(getSelectedUnitId());
 
   return (
     <div>

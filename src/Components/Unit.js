@@ -10,14 +10,11 @@ function Unit(props) {
   });
 
   function handleSelect(target) {
-    console.log(target);
     if (props.isPlayersTurn) {
-      console.log("It's my turn...");
       props.updateSelectedUnit(target);
     } else {
-      console.log("Not my turn...");
+      return;
     }
-    console.log(props.border);
   }
 
   return (
