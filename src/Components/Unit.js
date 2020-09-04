@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Unit.css";
 
 function Unit(props) {
-  const [classes, setClasses] = useState("unit " + props.player);
-  const [styles, setStyles] = useState({
+  const styles = {
     left: props.posX,
     top: props.posY,
     backgroundColor: props.color,
-  });
+  };
 
   function handleSelect(target) {
     if (props.isPlayersTurn) {
@@ -19,7 +18,11 @@ function Unit(props) {
 
   return (
     <div
-      className={props.isSelected ? "selected " + classes : classes}
+      className={
+        props.isSelected
+          ? "selected unit " + props.classes
+          : "unit " + props.classes
+      }
       id={props.id}
       player={props.player}
       role="button"

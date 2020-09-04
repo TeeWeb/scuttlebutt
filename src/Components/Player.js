@@ -9,13 +9,8 @@ const selectedBorderStyle = "2px solid #cfcf04";
 const defaultBorderStyle = "2px solid black";
 
 function Player(props) {
-  // const [mapDimensions, setMapDimensions] = useState([0, 0]);
-  const [playerName, setPlayerName] = useState(props.name);
   const playerColor = props.playerColor;
-  const [isPlayersTurn, setIsPlayersTurn] = useState(props.isPlayersTurn);
-  // const [classes, setClasses] = useState("player " + props.playerName);
   const [units, setUnits] = useState(props.units);
-  const [selectedUnit, setSelectedUnit] = useState(null);
 
   const livingUnits = (units) => {
     let livingUnitsArray = [];
@@ -53,7 +48,6 @@ function Player(props) {
           // eslint-disable-next-line
           if (newSelectedUnit.id == unit.id) {
             unit.isSelected = true;
-            setSelectedUnit(newSelectedUnit);
           } else {
             unit.isSelected = false;
           }
@@ -63,7 +57,6 @@ function Player(props) {
       // No currently selected unit. This is the first unit selection this turn.
       newUnitsArray[newSelectedUnit.id].isSelected = true;
       newUnitsArray[newSelectedUnit.id].borderStyle = selectedBorderStyle;
-      setSelectedUnit(newSelectedUnit);
     }
 
     setUnits(newUnitsArray);
@@ -75,13 +68,13 @@ function Player(props) {
         <Unit
           key={i}
           id={i}
-          className={"unit " + playerName}
-          player={playerName}
+          className={"unit " + props.playerName}
+          player={props.playerName}
           updateSelectedUnit={handleUnitsUpdate}
           posX={unit.posX}
           posY={unit.posY}
           color={playerColor}
-          isPlayersTurn={isPlayersTurn}
+          isPlayersTurn={props.isPlayersTurn}
           isSelected={unit.isSelected}
         />
       ))}
