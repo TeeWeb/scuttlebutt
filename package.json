@@ -5,7 +5,7 @@
   "dependencies": {
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
+    "react-scripts": "^3.4.3"
   },
   "scripts": {
     "dev": "parcel src/index.js",
@@ -36,7 +36,7 @@
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
     "@babel/runtime": "^7.6.3",
-    "babel-eslint": "^10.0.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-import": "^2.18.2",

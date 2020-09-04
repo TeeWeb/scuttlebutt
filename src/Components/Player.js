@@ -1,107 +1,100 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./Unit.css";
 import Unit from "./Unit";
 
 import "./Player.css";
 
-export default class Player extends React.Component {
-  state = {
-    units: this.props.units,
-    mapDimensions: [0, 0],
-    playerColor: this.props.playerColor,
-    isPlayersTurn: this.props.isPlayersTurn,
-    name: this.props.name,
-    getSelectedUnitId: function() {
-      let id;
-      this.units.forEach(unit => {
-        if (unit.isSelected === true) {
-          id = unit.id;
-        }
-      });
-      return id;
-    }
+const selectedBorderStyle = "2px solid #cfcf04";
+const defaultBorderStyle = "2px solid black";
+
+function Player(props) {
+  const [mapDimensions, setMapDimensions] = useState([0, 0]);
+  const [playerName, setPlayerName] = useState(props.name);
+  const playerColor = props.playerColor;
+  const [isPlayersTurn, setIsPlayersTurn] = useState(props.isPlayersTurn);
+  const [classes, setClasses] = useState("player " + props.playerName);
+  const [units, setUnits] = useState(props.units);
+  const [selectedUnit, setSelectedUnit] = useState(null);
+
+  const livingUnits = (units) => {
+    let livingUnitsArray = [];
+    units.forEach((unit) => {
+      if (unit.isAlive) {
+        livingUnitsArray.push(unit);
+      }
+    });
+    return livingUnitsArray;
   };
 
-  handleUnitsUpdate = newSelectedUnit => {
-    // Make sure it's this player's turn. Player can only select their own units
+  function getSelectedUnitId() {
+    let id;
+    units.forEach((unit) => {
+      if (unit.isSelected === true) {
+        id = unit.id;
+      }
+    });
+    return id;
+  }
+
+  function handleUnitsUpdate(newSelectedUnit) {
     console.log(newSelectedUnit);
 
-    // Initialize variables for the currently selected unit and a new unit array
-    const prevSelectedUnit = this.state.getSelectedUnitId();
-    const newUnitsArray = this.state.units.slice();
+    const prevSelectedUnit = getSelectedUnitId();
+    const newUnitsArray = units.slice();
     console.log(prevSelectedUnit, newUnitsArray);
 
     // Check if there is a unit currently selected (otherwise it will be undefined)
-    if (prevSelectedUnit) {
-      // Loop through units array
-      newUnitsArray.forEach(unit => {
-        // eslint-disable-next-line
-        if (newSelectedUnit.id == unit.id) {
-          //
-          console.log("FOUND SELECTED UNIT");
-          unit.isSelected = true;
-          unit.classes += " selected";
-          console.log(unit.classes);
-        } else {
-          unit.isSelected = false;
-          unit.classes = "unit " + this.name;
-        }
-      });
+    if (prevSelectedUnit !== undefined) {
+      // Check if unit is already selected (if so, deselect)
+      if (prevSelectedUnit == newSelectedUnit.id) {
+        newUnitsArray[prevSelectedUnit].isSelected = false;
+        newUnitsArray[prevSelectedUnit].borderStyle = defaultBorderStyle;
+      } else {
+        // Loop through units array
+        newUnitsArray.forEach((unit) => {
+          // eslint-disable-next-line
+          if (newSelectedUnit.id == unit.id) {
+            console.log("FOUND SELECTED UNIT");
+            unit.isSelected = true;
+            setSelectedUnit(newSelectedUnit);
+          } else {
+            unit.isSelected = false;
+          }
+        });
+      }
     } else {
       // No currently selected unit. This is the first unit selection this turn.
       console.log("First unit selection...", newSelectedUnit.id);
       newUnitsArray[newSelectedUnit.id].isSelected = true;
+      newUnitsArray[newSelectedUnit.id].borderStyle = selectedBorderStyle;
+      setSelectedUnit(newSelectedUnit);
     }
 
     console.log(newUnitsArray);
-    this.setState({ units: newUnitsArray });
-  };
-
-  componentDidMount() {
-    // TODO: refactor map dimension/state to Map.js
-    const map = document.getElementById("map");
-    this.setState({
-      mapDimensions: [map.clientWidth, map.clientHeight]
-    });
+    setUnits(newUnitsArray);
   }
 
-  componentDidUpdate() {
-    console.log("Selected Unit ID: " + this.state.getSelectedUnitId());
-    console.log(this.state.units);
-  }
+  console.log(getSelectedUnitId());
 
-  render() {
-    const classes = "player " + this.state.name;
-    const livingUnits = this.state.units.map((unit, i) => {
-      if (unit.isAlive) {
-        let unitClass;
-        if (this.state.getSelectedUnitId() === i) {
-          unitClass = "unit " + this.state.name + " selected";
-        } else {
-          unitClass = "unit " + this.state.name;
-        }
-        console.log(unitClass);
-        return (
-          <Unit
-            key={i}
-            id={i}
-            className={unitClass}
-            player={this.props.name}
-            info={unit}
-            updateSelectedUnit={this.handleUnitsUpdate}
-            posX={unit.posX}
-            posY={unit.posY}
-            color={this.state.playerColor}
-            isPlayersTurn={this.state.isPlayersTurn}
-            isSelected={unit.isSelected}
-          />
-        );
-      } else {
-        return false;
-      }
-    });
-
-    return <div className={classes}>{livingUnits}</div>;
-  }
+  return (
+    <div>
+      {livingUnits(units).map((unit, i) => (
+        <Unit
+          key={i}
+          id={i}
+          className={"unit " + playerName}
+          player={playerName}
+          updateSelectedUnit={handleUnitsUpdate}
+          posX={unit.posX}
+          posY={unit.posY}
+          color={playerColor}
+          isPlayersTurn={isPlayersTurn}
+          isSelected={unit.isSelected}
+        />
+      ))}
+    </div>
+  );
 }
+
+export default Player;
